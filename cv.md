@@ -21,6 +21,7 @@ Additionally, I have experience creating my own projects and educational project
 as well as completing a 3-month internship that further enhanced my practical skills.
 ### Skills
 - Python
+- OOP
 - SQL
 - MySQL
 - Git
