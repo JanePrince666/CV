@@ -42,7 +42,6 @@ from tor_python_easy.tor_control_port_client import TorControlPortClient
 from config import DATA_FOR_DATABASE
 from db_management_OOP import ParsingChannels, PostingList, MonitoredTelegramChannels
 
-
 tor_control_port_client = TorControlPortClient('tor', 9050)
 
 # Establish a connection with Tor Control Port and change the IP address through Tor every 5 seconds.
