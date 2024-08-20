@@ -13,3 +13,9 @@
 ### Personal Information
 **Date of Birth:** 31.05.1996<br>
 **City:** Tbilisi
+### Summary
+My thirst for knowledge is strong. I strive for more than just a surface-level understanding.
+I want to grasp the intricacies and nuances. By actively exploring Python's vast ecosystem,
+I keep my skills sharp and my mind adaptable, preparing myself to tackle any challenges that come my way.<br>
+Additionally, I have experience creating my own projects and educational projects,
+as well as completing a 3-month internship that further enhanced my practical skills.
