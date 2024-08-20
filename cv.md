@@ -19,3 +19,12 @@ I want to grasp the intricacies and nuances. By actively exploring Python's vast
 I keep my skills sharp and my mind adaptable, preparing myself to tackle any challenges that come my way.<br>
 Additionally, I have experience creating my own projects and educational projects,
 as well as completing a 3-month internship that further enhanced my practical skills.
+### Skills
+- Python
+- SQL
+- MySQL
+- Git
+- Docker
+- Aiogram 3
+- Django
+- Analytical skills
