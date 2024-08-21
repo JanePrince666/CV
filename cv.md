@@ -29,6 +29,29 @@ as well as completing a 3-month internship that further enhanced my practical sk
 - Aiogram 3
 - Django
 - Analytical skills
+
+### Work experience
+
+---
+**ODIN DAO** (Remote)
+**Backend Developer (Intern)**
+**October 2022 - January 2023**
+
+- Participated in a project for collecting and analyzing data on the cryptocurrency market.
+- Developed a module for parsing data from exchanges and blockchains.
+- Loaded data into PostgreSQL for further analysis.
+---
+**Self-learner** (Remote)
+**Python Developer (Intern)**
+**May 2019 - Present**
+
+- Developed a Telegram bot using aiogram 3.
+- Utilized Docker for application containerization.
+- Implemented multithreading to enhance performance.
+- Parsed web pages using Beautiful Soup.
+- Worked with MySQL and PostgreSQL databases.
+- Used Git for version control.
+---
 ### Code example
 ```python
 import re
@@ -44,11 +67,12 @@ from db_management_OOP import ParsingChannels, PostingList, MonitoredTelegramCha
 
 tor_control_port_client = TorControlPortClient('tor', 9050)
 
-# Establish a connection with Tor Control Port and change the IP address through Tor every 5 seconds.
+# Establish a connection with Tor Control Port
+# and change the IP address through Tor every 5 seconds.
 tor_control_port_client.change_connection_ip(seconds_wait=5)
 
-# Set the proxy server configuration to use SOCKS5 proxy on localhost and
-# port 9050 for HTTP and HTTPS requests.
+# Set the proxy server configuration to use SOCKS5 proxy on localhost
+# and port 9050 for HTTP and HTTPS requests.
 proxy_config = {
     'http': 'socks5://tor:9050',
     'https': 'socks5://tor:9050',
@@ -99,7 +123,9 @@ def get_posts(url: str) -> list | bool:
     """
     soup = check_on_stub(url)
     if soup:
-        posts = soup.find_all('div', class_="tgme_widget_message text_not_supported_wrap js-widget_message")
+        posts = soup.find_all('div', class_="tgme_widget_message "
+                                           "text_not_supported_wrap "
+                                           "js-widget_message")
         return posts
     else:
         return False
@@ -117,7 +143,8 @@ def pars_channel(url: str, last_post_number: int, first_launch: bool):
     posts = get_posts(url)
     attempt_counter = 0
 
-    # Retry getting posts, changing the IP address through Tor on unsuccessful attempts.
+    # Retry getting posts, changing the IP address through Tor
+    # on unsuccessful attempts.
     while not posts:
         attempt_counter += 1
         tor_control_port_client.change_connection_ip(seconds_wait=5)
@@ -132,19 +159,22 @@ def pars_channel(url: str, last_post_number: int, first_launch: bool):
         post_number = int(re.search('\/\d+', post_url_data).group()[1:])
         post_url = "https://t.me/" + post_url_data
         try:
-            text = post.find_all('div', class_="tgme_widget_message_text js-message_text")[0].text
+            text = post.find_all('div', class_="tgme_widget_message_text "
+                                              "js-message_text")[0].text
         except:
             text = ""
 
-        # When a new post is detected, add it to the posting list for channel subscribers,
-        # if this is not the first bot launch and if there are channels subscribed to this Telegram channel
+        # When a new post is detected, add it to the posting list for channel
+        # subscribers, if this is not the first bot launch and if there are
+        # channels subscribed to this Telegram channel
         if post_number > last_post_number:
             last_post_number = post_number
             subscribed_user_channels = MonitoredTelegramChannels(
                 *DATA_FOR_DATABASE).get_user_channels_subscribed_on_tg_channel(url)
             if not first_launch and len(subscribed_user_channels) > 0:
                 for user_channel in subscribed_user_channels:
-                    PostingList(*DATA_FOR_DATABASE).add_to_posting_list(post_url, text, user_channel)
+                    PostingList(*DATA_FOR_DATABASE).add_to_posting_list(
+                        post_url, text, user_channel)
 
     # Update the last post number for the channel in the database
     ParsingChannels(*DATA_FOR_DATABASE).change_channel_last_post(url, last_post_number)
@@ -159,7 +189,8 @@ def get_channel_list() -> list[str]:
     connection = ParsingChannels(*DATA_FOR_DATABASE)
     channel_list = connection.get_channels_list()
 
-    # Split the channel list into blocks of 20 channels each and yield these blocks using a generator
+    # Split the channel list into blocks of 20 channels each
+    # and yield these blocks using a generator
     for i in range(0, len(channel_list), 20):
         unit = channel_list[i:i + 20]
         yield unit
@@ -175,38 +206,17 @@ def get_new_posts():
     while True:
         channels = get_channel_list()
         for unit in channels:
-
             # For each of the 20 channels, start a parallel parsing process
             for url, start_post in unit:
-                t = multiprocessing.Process(target=pars_channel, args=(url, start_post, first_launch,))
+                t = multiprocessing.Process(target=pars_channel,
+                                            args=(url, start_post, first_launch,))
                 t.start()
 
-            # After processing 20 channels, wait 10 seconds to avoid starting an infinite number of
-            # processes simultaneously. Then continue.
+            # After processing 20 channels, wait 10 seconds to avoid starting
+            # an infinite number of processes simultaneously. Then continue.
             time.sleep(10)
 
-        # After completing the channel parsing for the first time, set the first launch flag to False.
+        # After completing the channel parsing for the first time,
+        # set the first launch flag to False.
         first_launch = False
 ```
-### Work experience
-
----
-**ODIN DAO** (Remote)
-**Backend Developer (Intern)**
-**October 2022 - January 2023**
-
-- Participated in a project for collecting and analyzing data on the cryptocurrency market.
-- Developed a module for parsing data from exchanges and blockchains.
-- Loaded data into PostgreSQL for further analysis.
----
-**Self-learner** (Remote)
-**Python Developer (Intern)**
-**May 2019 - Present**
-
-- Developed a Telegram bot using aiogram 3.
-- Utilized Docker for application containerization.
-- Implemented multithreading to enhance performance.
-- Parsed web pages using Beautiful Soup.
-- Worked with MySQL and PostgreSQL databases.
-- Used Git for version control.
----
