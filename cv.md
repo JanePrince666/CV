@@ -1,4 +1,4 @@
-# Evgenia Sakhnova
+# Evgeniia Sakhnova
 
 ![](/photo.png)
 
