@@ -1,1 +1,1 @@
-[CV](https://JanePrince666.github.io/CV)
+[CV](https://JanePrince666.github.io/CV/)
