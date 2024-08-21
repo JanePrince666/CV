@@ -52,6 +52,14 @@ as well as completing a 3-month internship that further enhanced my practical sk
 - Worked with MySQL and PostgreSQL databases.
 - Used Git for version control.
 ---
+### Education
+**Voronezh State University**<br>
+2014 - 2019<br>
+Bachelor of Pharmaceutical Sciences<br>
+Pharmacy
+### Certificates
+Kind, kind Python - training course from Sergey Balakirev<br>
+Kind, kind Python OOP - training course from Sergey Balakirev
 ### Code example
 ```python
 import re
