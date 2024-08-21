@@ -33,6 +33,7 @@ as well as completing a 3-month internship that further enhanced my practical sk
 ### Work experience
 
 ---
+
 **ODIN DAO** (Remote)
 **Backend Developer (Intern)**
 **October 2022 - January 2023**
@@ -40,7 +41,9 @@ as well as completing a 3-month internship that further enhanced my practical sk
 - Participated in a project for collecting and analyzing data on the cryptocurrency market.
 - Developed a module for parsing data from exchanges and blockchains.
 - Loaded data into PostgreSQL for further analysis.
+
 ---
+
 **Self-learner** (Remote)
 **Python Developer (Intern)**
 **May 2019 - Present**
@@ -51,6 +54,7 @@ as well as completing a 3-month internship that further enhanced my practical sk
 - Parsed web pages using Beautiful Soup.
 - Worked with MySQL and PostgreSQL databases.
 - Used Git for version control.
+
 ---
 ### Education
 **Voronezh State University**<br>
