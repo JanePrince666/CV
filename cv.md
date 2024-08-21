@@ -41,7 +41,7 @@ as well as completing a 3-month internship that further enhanced my practical sk
 
 **Self-learner** (Remote)
 **Python Developer (Intern)**
-**May 2019 - Present**
+**May 2022 - Present**
 - Developed a Telegram bot using aiogram 3.
 - Utilized Docker for application containerization.
 - Implemented multithreading to enhance performance.
