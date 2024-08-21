@@ -48,14 +48,17 @@ as well as completing a 3-month internship that further enhanced my practical sk
 - Parsed web pages using Beautiful Soup.
 - Worked with MySQL and PostgreSQL databases.
 - Used Git for version control.
+
 ### Education
 **Voronezh State University**<br>
 2014 - 2019<br>
 Bachelor of Pharmaceutical Sciences<br>
 Pharmacy
+
 ### Certificates
 Kind, kind Python - training course from Sergey Balakirev<br>
 Kind, kind Python OOP - training course from Sergey Balakirev
+
 ### Projects
 **[Lenta bot](https://github.com/JanePrince666/Lenta_bot)**<br>
 A bot for parsing open Telegram channels from the web and
@@ -63,9 +66,11 @@ forwarding new messages to the channels and chats of users
 who have subscribed to the channels they need.
 Technologies used include aiogram 3 (asynchronous programming),
 multiprocessing, Beautiful Soup, MySQL, and proxying through Tor.
+
 ### Languages
 **Russian** — native<br>
 **English** — B1
+
 ### Code example
 
 ```python
