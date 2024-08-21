@@ -188,3 +188,25 @@ def get_new_posts():
         # After completing the channel parsing for the first time, set the first launch flag to False.
         first_launch = False
 ```
+### Work experience
+
+---
+**ODIN DAO** (Remote)
+**Backend Developer (Intern)**
+**October 2022 - January 2023**
+
+- Participated in a project for collecting and analyzing data on the cryptocurrency market.
+- Developed a module for parsing data from exchanges and blockchains.
+- Loaded data into PostgreSQL for further analysis.
+---
+**Self-learner** (Remote)
+**Python Developer (Intern)**
+**May 2019 - Present**
+
+- Developed a Telegram bot using aiogram 3.
+- Utilized Docker for application containerization.
+- Implemented multithreading to enhance performance.
+- Parsed web pages using Beautiful Soup.
+- Worked with MySQL and PostgreSQL databases.
+- Used Git for version control.
+---
