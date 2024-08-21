@@ -67,7 +67,9 @@ multiprocessing, Beautiful Soup, MySQL, and proxying through Tor.
 **Russian** — native<br>
 **English** — B1
 ### Code example
+
 ```python
+
 import re
 import time
 
@@ -233,4 +235,6 @@ def get_new_posts():
         # After completing the channel parsing for the first time,
         # set the first launch flag to False.
         first_launch = False
+
+
 ```
