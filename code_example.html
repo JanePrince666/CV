@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .code-container {
+            background-color: #556B2F; /* Оливковый цвет фона кода */
+            color: #FFFFFF; /* Белый цвет текста кода */
+            padding: 20px;
+            border-radius: 5px;
+            overflow-x: auto; /* Горизонтальная прокрутка для длинных строк */
+            margin: 0;
+        }
+        .keyword { color: #FFA07A; } /* Цвет ключевых слов */
+        .string { color: #FFD700; } /* Цвет строк */
+        .comment { color: #A9A9A9; } /* Цвет комментариев */
+        .function { color: #8FBC8F; } /* Цвет функций */
+        .decorator { color: #FF6347; } /* Цвет декораторов */
+        .parameter { color: #1A472A; } /* Цвет параметров */
+    </style>
+</head>
+<body>
+    <div class="code-container">
+        <pre>
+<span class="keyword">import</span> re
+<span class="keyword">import</span> time
+
+<span class="keyword">import</span> requests
+<span class="keyword">import</span> multiprocessing
+<span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="keyword">as</span> bs
+<span class="keyword">from</span> tor_python_easy.tor_control_port_client <span class="keyword">import</span> TorControlPortClient
+
+<span class="keyword">from</span> config <span class="keyword">import</span> DATA_FOR_DATABASE
+<span class="keyword">from</span> db_management_OOP <span class="keyword">import</span> ParsingChannels, PostingList, MonitoredTelegramChannels
+
+tor_control_port_client = TorControlPortClient(<span class="string">'tor'</span>, 9050)
+
+<span class="comment"># Establish a connection with Tor Control Port</span>
+<span class="comment"># and change the IP address through Tor every 5 seconds.</span>
+tor_control_port_client.change_connection_ip(seconds_wait=5)
+
+<span class="comment"># Set the proxy server configuration to use SOCKS5 proxy on localhost</span>
+<span class="comment"># and port 9050 for HTTP and HTTPS requests.</span>
+proxy_config = {
+    <span class="string">'http'</span>: <span class="string">'socks5://tor:9050'</span>,
+    <span class="string">'https'</span>: <span class="string">'socks5://tor:9050'</span>,
+}
+
+<span class="keyword">def</span> get_html(url: <span class="parameter">str</span>) -> bs:
+    <span class="comment">"""
+    Return BeautifulSoup object by url
+    :param url: URL of the web page
+    :type url: str
+    :return: BeautifulSoup object
+    """</span>
+    <span class="keyword">try</span>:
+        response = requests.get(url, proxies=proxy_config)
+        soup = bs(response.content, <span class="string">'html.parser'</span>)
+        <span class="keyword">return</span> soup
+    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:
+        print(<span class="string">'Failed to get HTML: '</span> + <span class="keyword">str</span>(e))
+
+<span class="keyword">def</span> check_on_stub(url: <span class="parameter">str</span>) -> bs | <span class="keyword">bool</span>:
+    <span class="comment">"""
+    Check whether the received page is a Telegram stub
+    :param url: URL of the web page
+    :type url: str
+    :return: BeautifulSoup object if the page is not a stub, False otherwise
+    """</span>
+    soup = get_html(url)
+    <span class="keyword">try</span>:
+        <span class="keyword">if</span> soup.find(<span class="string">'div'</span>, class_=<span class="string">"tgme_page_additional"</span>):
+            <span class="keyword">return</span> <span class="keyword">False</span>
+        <span class="keyword">else</span>:
+            <span class="keyword">return</span> soup
+    <span class="keyword">except</span>:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+
+<span class="keyword">def</span> get_posts(url: <span class="parameter">str</span>) -> <span class="keyword">list</span> | <span class="keyword">bool</span>:
+    <span class="comment">"""
+    Return posts found on the channel page as a list
+    :param url: URL of the channel page
+    :type url: str
+    :return: List of post elements if found, False otherwise
+    """</span>
+    soup = check_on_stub(url)
+    <span class="keyword">if</span> soup:
+        posts = soup.find_all(<span class="string">'div'</span>, class_=<span class="string">"tgme_widget_message text_not_supported_wrap js-widget_message"</span>)
+        <span class="keyword">return</span> posts
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="keyword">False</span>
+
+<span class="keyword">def</span> pars_channel(url: <span class="parameter">str</span>, last_post_number: <span class="parameter">int</span>, first_launch: <span class="parameter">bool</span>):
+    <span class="comment">"""
+    Parse Telegram channel. The result is reflected in the database
+    :param url: URL of the channel page
+    :param last_post_number: Number of the last parsed post
+    :param first_launch: Flag indicating the first launch of the bot
+    """</span>
+    <span class="comment"># Extract posts from the channel using the get_posts function.</span>
+    posts = get_posts(url)
+    attempt_counter = 0
+
+    <span class="comment"># Retry getting posts, changing the IP address through Tor</span>
+    <span class="comment"># on unsuccessful attempts.</span>
+    <span class="keyword">while</span> <span class="keyword">not</span> posts:
+        attempt_counter += 1
+        tor_control_port_client.change_connection_ip(seconds_wait=5)
+        posts = get_posts(url)
+        <span class="keyword">if</span> attempt_counter > 5:
+            print(<span class="string">'Error connecting to Tor'</span>)
+    last_post_number = last_post_number
+
+    <span class="comment"># Check each post for the presence of text information</span>
+    <span class="keyword">for</span> post <span class="keyword">in</span> posts:
+        post_url_data = post[<span class="string">'data-post'</span>]
+        post_number = <span class="keyword">int</span>(re.search(<span class="string">'\/\d+'</span>, post_url_data).group()[1:])
+        post_url = <span class="string">"https://t.me/"</span> + post_url_data
+        <span class="keyword">try</span>:
+            text = post.find_all(<span class="string">'div'</span>, class_=<span class="string">"tgme_widget_message_text js-message_text"</span>)[0].text
+        <span class="keyword">except</span>:
+            text = <span class="string">""</span>
+
+        <span class="comment"># When a new post is detected, add it to the posting list for channel</span>
+        <span class="comment"># subscribers, if this is not the first bot launch and if there are</span>
+        <span class="comment"># channels subscribed to this Telegram channel</span>
+        <span class="keyword">if</span> post_number > last_post_number:
+            last_post_number = post_number
+            subscribed_user_channels = MonitoredTelegramChannels(
+                *DATA_FOR_DATABASE).get_user_channels_subscribed_on_tg_channel(url)
+            <span class="keyword">if</span> <span class="keyword">not</span> first_launch <span class="keyword">and</span> len(subscribed_user_channels) > 0:
+                <span class="keyword">for</span> user_channel <span class="keyword">in</span> subscribed_user_channels:
+                    PostingList(*DATA_FOR_DATABASE).add_to_posting_list(
+                        post_url, text, user_channel)
+
+    <span class="comment"># Update the last post number for the channel in the database</span>
+    ParsingChannels(*DATA_FOR_DATABASE).change_channel_last_post(url, last_post_number)
+
+<span class="keyword">def</span> get_channel_list() -> <span class="keyword">list</span>[<span class="parameter">str</span>]:
+    <span class="comment">"""
+    Return a generator for get_new_posts
+    :return: List of channel URLs
+    """</span>
+    connection = ParsingChannels(*DATA_FOR_DATABASE)
+    channel_list = connection.get_channels_list()
+
+    <span class="comment"># Split the channel list into blocks of 20 channels each</span>
+    <span class="comment"># and yield these blocks using a generator</span>
+    <span class="keyword">for</span> i <span class="keyword">in</span> range(0, len(channel_list), 20):
+        unit = channel_list[i:i + 20]
+        <span class="keyword">yield</span> unit
+
+<span class="keyword">def</span> get_new_posts():
+    <span class="comment">"""
+    Endlessly parse Telegram channels in blocks of 20 at a time
+    """</span>
+    first_launch = <span class="keyword">True</span>  <span class="comment"># Set the first launch flag to True.</span>
+
+    <span class="comment"># Infinite loop for processing new posts.</span>
+    <span class="keyword">while</span> <span class="keyword">True</span>:
+        channels = get_channel_list()
+        <span class="keyword">for</span> unit <span class="keyword">in</span> channels:
+            <span class="comment"># For each of the 20 channels, start a parallel parsing process</span>
+            <span class="keyword">for</span> url, start_post <span class="keyword">in</span> unit:
+                t = multiprocessing.Process(target=pars_channel,
+                                            args=(url, start_post, first_launch,))
+                t.start()
+
+            <span class="comment"># After processing 20 channels, wait 10 seconds to avoid starting</span>
+            <span class="comment"># an infinite number of processes simultaneously. Then continue.</span>
+            time.sleep(10)
+
+        <span class="comment"># After completing the channel parsing for the first time,</span>
+        <span class="comment"># set the first launch flag to False.</span>
+        first_launch = <span class="keyword">False</span>
+        </pre>
+    </div>
+</body>
+</html>
