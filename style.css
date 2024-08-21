@@ -1,0 +1,95 @@
+/* Общие стили */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0; /* Убираем отступы */
+    background-color: #EEEEEE;
+}
+
+.container {
+    display: flex; /* Используем flexbox для разделения на две части */
+    margin: auto;
+}
+
+header {
+    display: flex;
+    align-items: center; /* Центрируем элементы по вертикали */
+    margin-bottom: 0; /* Убираем отступ снизу */
+}
+
+.profile-photo {
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    object-fit: cover; /* Обеспечивает правильное соотношение сторон */
+    margin-right: 20px; /* Отступ справа от фото */
+    margin-bottom: 20px;
+}
+
+.header-text {
+    text-align: left; /* Выравнивание текста заголовков по левому краю */
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 3em;
+    margin: 30px 0;
+    color: #1A472A; /* Цвет заголовка */
+}
+
+h2 {
+    font-size: 2em;
+    margin: 30px 0;
+    color: #556B2F; /* Оливковый цвет заголовка */
+}
+
+ul {
+    list-style-type: square;
+    margin-left: 0px;
+    margin-top: 5px; /* Уменьшение отступа сверху для списка */
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Стили для левой колонки */
+.left-column {
+    width: 33%; /* Ширина левой колонки */
+    background: #556B2F; /* Оливковый цвет фона левой колонки */
+    color: #FFFFFF; /* Белый цвет текста в левой колонке */
+    padding: 20px; /* Отступы внутри левой колонки */
+}
+
+.left-column h3 {
+    color: #000000; /* Цвет заголовков в левой колонке */
+    margin: 0; /* Убираем отступы для заголовков */
+}
+
+.left-column a {
+    color: #FFA07A; /* Цвет ссылок в левой колонке */
+}
+
+/* Стили для правой колонки */
+.right-column {
+    width: 67%; /* Ширина правой колонки */
+    background: #D2B48C; /* Коричневый цвет фона правой колонки */
+    color: #000000; /* Черный цвет текста в правой колонке */
+    padding: 20px; /* Отступы внутри правой колонки */
+}
+
+.right-column h3 {
+    color: #1A472A; /* Цвет заголовков в правой колонке */
+}
+
+.right-column a {
+    color: #556B2F; /* Цвет ссылок - темный оливково-зеленый */
+}
+
+.right-column a:hover {
+    color: #8FBC8F; /* Цвет ссылок при наведении - темный зеленовато-серый */
+}
