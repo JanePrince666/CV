@@ -67,6 +67,9 @@ forwarding new messages to the channels and chats of users
 who have subscribed to the channels they need.
 Technologies used include aiogram 3 (asynchronous programming),
 multiprocessing, Beautiful Soup, MySQL, and proxying through Tor.
+### Languages
+**Russian** — native<br>
+**English** — B1
 ### Code example
 ```python
 import re
